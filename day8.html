@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="bingbot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="theme-color" content="#173e79">
+<title>Day 8 — Bangkok City Tour</title>
+<style>
+:root {
+  --ink:#17233c; --muted:#617089; --blue:#24539a; --blue2:#173e79;
+  --paper:#f4f7fb; --card:#fff; --line:#dbe3ee; --gold:#f4c85b;
+  --green:#16714f; --shadow:0 8px 24px rgba(27,48,83,.09);
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+body {
+  margin:0; color:var(--ink); background:var(--paper);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  line-height:1.5; overflow-x:hidden;
+}
+a,button { -webkit-tap-highlight-color:transparent; }
+.trip-nav {
+  position:sticky; top:0; z-index:9999; background:rgba(255,255,255,.96);
+  backdrop-filter:blur(12px); border-bottom:1px solid var(--line);
+  box-shadow:0 4px 16px rgba(27,48,83,.06);
+}
+.nav-inner {
+  width:min(1060px,100%); margin:0 auto; display:flex; align-items:center; gap:8px;
+  padding:9px 14px; overflow-x:auto; scrollbar-width:none;
+}
+.nav-inner::-webkit-scrollbar { display:none; }
+.brand { flex:0 0 auto; font-weight:900; color:var(--blue2); margin-right:4px; white-space:nowrap; }
+.trip-nav a {
+  flex:0 0 auto; text-decoration:none; color:var(--blue2); background:#f4f7fb;
+  border:1px solid var(--line); border-radius:999px; padding:8px 13px; min-height:38px;
+  display:inline-flex; align-items:center; justify-content:center; font-weight:800; font-size:.88rem;
+}
+.trip-nav a.active { background:var(--blue); color:#fff; border-color:var(--blue); }
+
+header {
+  background:linear-gradient(135deg,var(--blue2),var(--blue)); color:#fff;
+  padding:calc(30px + env(safe-area-inset-top)) 18px 31px;
+}
+.wrap { width:min(1060px,100%); margin:0 auto; }
+.eyebrow { font-weight:800; font-size:.76rem; letter-spacing:.13em; text-transform:uppercase; opacity:.8; }
+h1 { font-size:clamp(2rem,7vw,3.4rem); line-height:1.04; margin:.4rem 0 .55rem; }
+.subtitle { max-width:800px; margin:0; color:#e6efff; }
+.actions { display:flex; flex-wrap:wrap; gap:9px; margin-top:18px; }
+.btn {
+  display:inline-flex; align-items:center; justify-content:center; min-height:44px;
+  padding:10px 14px; border-radius:11px; text-decoration:none; font-weight:800;
+  background:#fff; color:var(--blue2); border:1px solid rgba(255,255,255,.3);
+}
+.btn.secondary { background:transparent; color:#fff; }
+
+.summary { margin:-16px auto 22px; padding:0 18px; position:relative; }
+.summary-grid {
+  background:#fff; border:1px solid var(--line); box-shadow:var(--shadow); border-radius:16px;
+  display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1px; overflow:hidden;
+}
+.stat { padding:15px 14px; min-width:0; }
+.stat b { display:block; font-size:1rem; }
+.stat span { display:block; color:var(--muted); font-size:.83rem; margin-top:2px; }
+
+main { padding:0 18px 44px; }
+.alert {
+  background:#fff9df; border:1px solid #eed784; border-left:5px solid var(--gold);
+  border-radius:12px; padding:13px 15px; margin-bottom:20px;
+}
+.alert + .alert { margin-top:-8px; }
+.timeline { position:relative; }
+.timeline:before {
+  content:""; position:absolute; left:79px; top:14px; bottom:14px; width:2px; background:var(--line);
+}
+.stop {
+  display:grid; grid-template-columns:78px minmax(0,1fr); gap:20px;
+  position:relative; margin-bottom:18px; min-width:0;
+}
+.timebox { text-align:right; padding-top:13px; z-index:1; }
+.timebox b { display:block; color:var(--blue2); font-size:.94rem; }
+.timebox span { display:block; color:var(--muted); font-size:.78rem; }
+.card {
+  min-width:0; background:var(--card); border:1px solid var(--line);
+  border-radius:16px; box-shadow:var(--shadow); padding:17px; position:relative;
+}
+.card:before {
+  content:""; position:absolute; left:-27px; top:20px; width:12px; height:12px;
+  background:var(--blue); border:4px solid var(--paper); border-radius:50%;
+}
+.title-row { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+.stop-title { display:flex; align-items:flex-start; gap:9px; min-width:0; }
+.letter {
+  flex:0 0 30px; width:30px; height:30px; border-radius:50%; display:grid; place-items:center;
+  background:var(--blue); color:#fff; font-weight:900; font-size:.88rem;
+}
+h3 { margin:1px 0 0; font-size:1.2rem; line-height:1.25; overflow-wrap:anywhere; }
+.small-btn {
+  flex:0 0 auto; color:#fff; background:var(--blue); text-decoration:none; font-weight:800;
+  font-size:.8rem; border-radius:9px; min-height:38px; padding:8px 10px;
+  display:inline-flex; align-items:center;
+}
+.address { color:#3d4d65; margin:9px 0 7px; overflow-wrap:anywhere; font-size:.91rem; }
+.meta { display:flex; flex-wrap:wrap; gap:7px 16px; color:var(--muted); font-size:.86rem; }
+.note { margin:12px 0 5px; }
+.tips { margin:8px 0 0; padding-left:20px; color:#4b5b72; }
+.tips li { margin:4px 0; }
+.map-details { margin-top:13px; }
+.map-details summary {
+  cursor:pointer; color:var(--blue2); font-weight:800; min-height:42px;
+  display:flex; align-items:center; user-select:none;
+}
+.map-wrap { border:1px solid var(--line); border-radius:12px; overflow:hidden; background:#edf2f7; }
+.map-wrap iframe { width:100%; height:285px; display:block; border:0; }
+
+.route-overview {
+  margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:18px;
+  box-shadow:var(--shadow); padding:18px; min-width:0;
+}
+.route-overview h2 { margin:0 0 4px; font-size:clamp(1.35rem,4vw,1.65rem); }
+.route-intro { color:var(--muted); margin:0 0 17px; }
+.route-chain {
+  display:flex; align-items:stretch; overflow-x:auto; padding:5px 3px 12px;
+  scrollbar-width:thin; min-width:0;
+}
+.route-node {
+  flex:0 0 142px; min-height:122px; padding:11px 8px; text-align:center; color:var(--ink);
+  text-decoration:none; border:1px solid var(--line); border-radius:13px; background:#f9fbff;
+}
+.route-node strong,.route-node small { display:block; overflow-wrap:anywhere; }
+.route-node strong { font-size:.9rem; line-height:1.2; }
+.route-node small { color:var(--muted); font-size:.77rem; margin-top:4px; }
+.pin-letter {
+  width:37px; height:37px; border-radius:50%; margin:0 auto 7px;
+  background:var(--blue); color:#fff; display:grid; place-items:center; font-weight:900;
+}
+.route-arrow { flex:0 0 34px; display:grid; place-items:center; }
+.route-arrow:before { content:"→"; color:var(--blue); font-size:1.3rem; font-weight:900; }
+
+.direction-box { margin-top:17px; border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+.direction-head { padding:14px 14px 8px; }
+.direction-head h3 { margin:0; }
+.direction-head p { color:var(--muted); margin:4px 0 0; font-size:.86rem; }
+.route-controls {
+  display:flex; gap:7px; overflow-x:auto; padding:7px 13px 12px; scrollbar-width:thin;
+}
+.route-chip {
+  flex:0 0 auto; border:1px solid #cbd7ea; border-radius:999px; background:#f7faff;
+  color:var(--blue2); font:inherit; font-weight:800; font-size:.82rem;
+  min-height:40px; padding:8px 11px; cursor:pointer;
+}
+.route-chip.active { background:var(--blue); border-color:var(--blue); color:#fff; }
+.direction-map { width:100%; height:450px; border:0; display:block; background:#edf2f7; }
+.route-note {
+  margin-top:14px; background:#eef5ff; color:#29486f; border:1px solid #cbdcf4;
+  border-radius:12px; padding:12px 14px;
+}
+.footer {
+  margin-top:22px; background:#fff; border:1px solid var(--line); border-radius:14px;
+  color:var(--muted); padding:15px; font-size:.87rem;
+}
+
+@media (max-width:760px) {
+  .brand { display:none; }
+  .nav-inner { padding:8px 10px; }
+  .trip-nav a { padding:8px 11px; font-size:.84rem; }
+  header { padding-left:14px; padding-right:14px; }
+  .actions { display:grid; grid-template-columns:1fr; }
+  .btn { width:100%; }
+  .summary { padding:0 12px; }
+  .summary-grid { grid-template-columns:1fr 1fr; }
+  main { padding-left:12px; padding-right:12px; }
+  .timeline:before { display:none; }
+  .stop { display:block; margin-bottom:14px; }
+  .timebox { text-align:left; display:flex; align-items:baseline; gap:8px; padding:0 2px 6px; }
+  .timebox b { font-size:.91rem; }
+  .card { padding:14px; border-radius:14px; }
+  .card:before { display:none; }
+  .title-row { display:block; }
+  .stop-title { align-items:center; }
+  h3 { font-size:1.08rem; }
+  .small-btn { width:100%; justify-content:center; margin-top:10px; }
+  .meta { display:grid; grid-template-columns:1fr; gap:4px; }
+  .map-wrap iframe { height:240px; }
+  .route-overview { padding:14px; }
+  .route-chain { flex-direction:column; overflow:visible; gap:0; padding:4px 0 10px; }
+  .route-node {
+    width:100%; min-height:auto; flex:none; display:grid; grid-template-columns:44px 1fr;
+    column-gap:9px; text-align:left; align-items:center; padding:10px;
+  }
+  .pin-letter { grid-row:1 / span 2; margin:0; }
+  .route-node strong { align-self:end; font-size:.94rem; }
+  .route-node small { align-self:start; margin:1px 0 0; }
+  .route-arrow { flex:none; height:28px; }
+  .route-arrow:before { content:"↓"; }
+  .direction-map { height:360px; }
+}
+@media (max-width:390px) {
+  .summary-grid { grid-template-columns:1fr; }
+  .stat { padding:11px 13px; }
+  .card { padding:12px; }
+  .direction-map { height:330px; }
+}
+@media print {
+  body { background:#fff; }
+  .trip-nav,.actions,.map-details,.direction-box { display:none!important; }
+  header { background:#fff; color:#000; padding:0; }
+  .subtitle { color:#333; }
+  .summary { margin:10px 0; padding:0; }
+  main { padding:0; }
+  .card,.route-overview { box-shadow:none; break-inside:avoid; }
+}
+</style>
+</head>
+<body>
+
+<nav class="trip-nav" aria-label="Bangkok trip days">
+  <div class="nav-inner">
+    <span class="brand">Bangkok Trip</span>
+    <a href="/day7">Day 7</a>
+    <a href="/day8" class="active" aria-current="page">Day 8</a>
+    <a href="/day9">Day 9</a>
+    <a href="/day10">Day 10</a>
+  </div>
+</nav>
+
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Bangkok • Thursday, October 8, 2026</div>
+    <h1>Bangkok City Tour</h1>
+    <p class="subtitle">
+      Built from the sequence on your GM Holidays voucher. Since the voucher only fixes the
+      <strong>8:00 AM start</strong>, the stop-by-stop times below are estimates for planning only.
+    </p>
+    <div class="actions">
+      <a class="btn" href="https://www.google.com/maps/dir/?api=1&origin=PANNARAI%20HOTEL%20BANGKOK%20-%20PRATUNAM%2C%2099/8%20Ratchaprarop%20Rd%2C%20Makkasan%2C%20Ratchathewi%2C%20Bangkok%2010400%2C%20Thailand&destination=The%20Platinum%20Fashion%20Mall%2C%20222%20Phetchaburi%20Rd%2C%20Thanon%20Phetchaburi%2C%20Ratchathewi%2C%20Bangkok%2010400%2C%20Thailand&waypoints=Song%20Wat%20Road%2C%20Samphanthawong%2C%20Bangkok%2010100%2C%20Thailand%7CWat%20Arun%20Ratchawararam%20Ratchawaramahawihan%2C%20158%20Wang%20Doem%20Rd%2C%20Wat%20Arun%2C%20Bangkok%20Yai%2C%20Bangkok%2010600%2C%20Thailand%7CGems%20Gallery%20Bangkok%2C%20Bangkok%2C%20Thailand%7CHoney%20Bee%20Garden%20Bangkok%2C%20Bangkok%2C%20Thailand%7CThe%20Grand%20Palace%2C%20Na%20Phra%20Lan%20Road%2C%20Phra%20Borom%20Maha%20Ratchawang%2C%20Phra%20Nakhon%2C%20Bangkok%2010200%2C%20Thailand%7CWat%20Pho%2C%202%20Sanam%20Chai%20Rd%2C%20Phra%20Borom%20Maha%20Ratchawang%2C%20Phra%20Nakhon%2C%20Bangkok%2010200%2C%20Thailand%7CWat%20Benchamabophit%20Dusitwanaram%2C%2069%20Rama%20V%20Rd%2C%20Dusit%2C%20Bangkok%2010300%2C%20Thailand&travelmode=driving" target="_blank" rel="noopener">🗺️ Open voucher-order route in Google Maps</a>
+      <a class="btn secondary" href="#route">📍 Jump to A→I route</a>
+    </div>
+  </div>
+</header>
+
+<section class="summary">
+  <div class="wrap summary-grid">
+    <div class="stat"><b>8:00 AM</b><span>Hotel pickup</span></div>
+    <div class="stat"><b>8 tour stops</b><span>Voucher sequence</span></div>
+    <div class="stat"><b>No lunch</b><span>Bring water + snack</span></div>
+    <div class="stat"><b>~3:30 PM</b><span>Estimated drop-off</span></div>
+  </div>
+</section>
+
+<main class="wrap">
+  <div class="alert">
+    <strong>Important:</strong> the times after 8:00 AM are intentionally approximate.
+    Your guide, Bangkok traffic, ferry timing and attraction queues will determine the real schedule.
+    Follow the tour operator if the order changes on the day.
+  </div>
+  <div class="alert">
+    <strong>Temple day:</strong> wear something that covers shoulders and knees before leaving the hotel.
+    The Grand Palace has particularly strict clothing rules. Your voucher also says <strong>No Lunch</strong>.
+  </div>
+
+  <section class="timeline">
+    
+    <article class="stop">
+      <div class="timebox"><b>8:00 AM</b><span>Tour starts</span></div>
+      <div class="card">
+        <div class="title-row">
+          <div class="stop-title"><span class="letter">A</span><h3>🏨 PANNARAI Hotel — Pickup</h3></div>
+          <a class="small-btn" href="https://www.google.com/maps/search/?api=1&query=PANNARAI%20HOTEL%20BANGKOK%20-%20PRATUNAM%2C%2099/8%20Ratchaprarop%20Rd%2C%20Makkasan%2C%20Ratchathewi%2C%20Bangkok%2010400%2C%20Thailand" target="_blank" rel="noopener">Google Maps ↗</a>
+        </div>
+        <p class="address">PANNARAI HOTEL BANGKOK - PRATUNAM, 99/8 Ratchaprarop Rd, Makkasan, Ratchathewi, Bangkok 10400, Thailand</p>
+        <div class="meta">
+          <span>🕒 Pickup stated on your voucher: 8:00 AM</span>
+          <span>💸 Included tour transport</span>
+        </div>
+        <p class="note">Be in the lobby a little early. All times after this are planning estimates because the voucher gives the stop sequence, not a per-stop schedule.</p>
+        <ul class="tips"><li>Wear temple-appropriate clothing from the start: shoulders and knees covered.</li><li>Bring water and a small snack because your voucher says no lunch.</li></ul>
+        <details class="map-details">
+          <summary>📍 Show location map</summary>
+          <div class="map-wrap">
+            <iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps?q=PANNARAI%20HOTEL%20BANGKOK%20-%20PRATUNAM%2C%2099/8%20Ratchaprarop%20Rd%2C%20Makkasan%2C%20Ratchathewi%2C%20Bangkok%2010400%2C%20Thailand&output=embed" title="Map for PANNARAI Hotel — Pickup" allowfullscreen></iframe>
+          </div>
+        </details>
+      </div>
+    </article>
+    
+    <article class="stop">
+      <div class="timebox"><b>~8:30 AM</b><span>~9:05 AM</span></div>
+      <div class="card">
+        <div class="title-row">
+          <div class="stop-title"><span class="letter">B</span><h3>🏮 Song Wat Old Town Heritage Walking Street</h3></div>
+          <a class="small-btn" href="https://www.google.com/maps/search/?api=1&query=Song%20Wat%20Road%2C%20Samphanthawong%2C%20Bangkok%2010100%2C%20Thailand" target="_blank" rel="noopener">Google Maps ↗</a>
+        </div>
+        <p class="address">Song Wat Road, Samphanthawong, Bangkok 10100, Thailand</p>
+        <div class="meta">
+          <span>🕒 Outdoor heritage street</span>
+          <span>💸 Free to walk</span>
+        </div>
+        <p class="note">A short heritage walk through the Song Wat / Chinatown riverside district. Good for old shophouses, street details and quick photos.</p>
+        <ul class="tips"><li>Stay close to the guide because this is a walking stop.</li><li>Use comfortable shoes; the rest of the day also involves a lot of walking.</li></ul>
+        <details class="map-details">
+          <summary>📍 Show location map</summary>
+          <div class="map-wrap">
+            <iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps?q=Song%20Wat%20Road%2C%20Samphanthawong%2C%20Bangkok%2010100%2C%20Thailand&output=embed" title="Map for Song Wat Old Town Heritage Walking Street" allowfullscreen></iframe>
+          </div>
+        </details>
+      </div>
+    </article>
+    
+    <article class="stop">
+      <div class="timebox"><b>~9:20 AM</b><span>~10:05 AM</span></div>
+      <div class="card">
+        <div class="title-row">
+          <div class="stop-title"><span class="letter">C</span><h3>🛕 Wat Arun — Temple of Dawn</h3></div>
+          <a class="small-btn" href="https://www.google.com/maps/search/?api=1&query=Wat%20Arun%20Ratchawararam%20Ratchawaramahawihan%2C%20158%20Wang%20Doem%20Rd%2C%20Wat%20Arun%2C%20Bangkok%20Yai%2C%20Bangkok%2010600%2C%20Thailand" target="_blank" rel="noopener">Google Maps ↗</a>
+        </div>
+        <p class="address">Wat Arun Ratchawararam Ratchawaramahawihan, 158 Wang Doem Rd, Wat Arun, Bangkok Yai, Bangkok 10600, Thailand</p>
+        <div class="meta">
+          <span>🕒 Public visitor hours: 8:00 AM–6:00 PM</span>
+          <span>💸 Public reference: ฿200 (~₱373)</span>
+        </div>
+        <p class="note">One of Bangkok's signature riverside temples. Your package may arrange the ferry/vehicle transfer, so follow the guide rather than navigating independently.</p>
+        <ul class="tips"><li>Shoulders and knees covered.</li><li>The public fee is only a reference—confirm with the guide whether admission is already included.</li></ul>
+        <details class="map-details">
+          <summary>📍 Show location map</summary>
+          <div class="map-wrap">
+            <iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps?q=Wat%20Arun%20Ratchawararam%20Ratchawaramahawihan%2C%20158%20Wang%20Doem%20Rd%2C%20Wat%20Arun%2C%20Bangkok%20Yai%2C%20Bangkok%2010600%2C%20Thailand&output=embed" title="Map for Wat Arun — Temple of Dawn" allowfullscreen></iframe>
+          </div>
+        </details>
+      </div>
+    </article>
+    
+    <article class="stop">
+      <div class="timebox"><b>~10:25 AM</b><span>~10:50 AM</span></div>
+      <div class="card">
+        <div class="title-row">
+          <div class="stop-title"><span class="letter">D</span><h3>💎 Gems Gallery Bangkok</h3></div>
+          <a class="small-btn" href="https://www.google.com/maps/search/?api=1&query=Gems%20Gallery%20Bangkok%2C%20Bangkok%2C%20Thailand" target="_blank" rel="noopener">Google Maps ↗</a>
+        </div>
+        <p class="address">Gems Gallery Bangkok, Bangkok, Thailand</p>
+        <div class="meta">
+          <span>🕒 Tour shopping stop; current store listing opens daily</span>
+          <span>💸 Free entry • purchases optional</span>
+        </div>
+        <p class="note">A commercial stop included in the package sequence. Treat purchases as optional and compare prices before buying.</p>
+        <ul class="tips"><li>Do not feel pressured to buy.</li><li>Keep receipts and ask about tax/VAT documentation for expensive purchases.</li></ul>
+        <details class="map-details">
+          <summary>📍 Show location map</summary>
+          <div class="map-wrap">
+            <iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps?q=Gems%20Gallery%20Bangkok%2C%20Bangkok%2C%20Thailand&output=embed" title="Map for Gems Gallery Bangkok" allowfullscreen></iframe>
+          </div>
+        </details>
+      </div>
+    </article>
+    
+    <article class="stop">
+      <div class="timebox"><b>~11:00 AM</b><span>~11:25 AM</span></div>
+      <div class="card">
+        <div class="title-row">
+          <div class="stop-title"><span class="letter">E</span><h3>🍯 Honey Bee Garden</h3></div>
+          <a class="small-btn" href="https://www.google.com/maps/search/?api=1&query=Honey%20Bee%20Garden%20Bangkok%2C%20Bangkok%2C%20Thailand" target="_blank" rel="noopener">Google Maps ↗</a>
+        </div>
+        <p class="address">Honey Bee Garden Bangkok, Bangkok, Thailand</p>
+        <div class="meta">
+          <span>🕒 Tour-arranged stop</span>
+          <span>💸 Free entry • purchases optional</span>
+        </div>
+        <p class="note">Another package stop, generally focused on honey and bee-related products. The exact branch is best confirmed with your guide on the day.</p>
+        <ul class="tips"><li>Treat supplements/health claims cautiously.</li><li>Buy only if the product and price make sense to you.</li></ul>
+        <details class="map-details">
+          <summary>📍 Show location map</summary>
+          <div class="map-wrap">
+            <iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps?q=Honey%20Bee%20Garden%20Bangkok%2C%20Bangkok%2C%20Thailand&output=embed" title="Map for Honey Bee Garden" allowfullscreen></iframe>
+          </div>
+        </details>
+      </div>
+    </article>
+    
+    <article class="stop">
+      <div class="timebox"><b>~11:50 AM</b><span>~1:05 PM</span></div>
+      <div class="card">
+        <div class="title-row">
+          <div class="stop-title"><span class="letter">F</span><h3>👑 Grand Palace + Emerald Buddha</h3></div>
+          <a class="small-btn" href="https://www.google.com/maps/search/?api=1&query=The%20Grand%20Palace%2C%20Na%20Phra%20Lan%20Road%2C%20Phra%20Borom%20Maha%20Ratchawang%2C%20Phra%20Nakhon%2C%20Bangkok%2010200%2C%20Thailand" target="_blank" rel="noopener">Google Maps ↗</a>
+        </div>
+        <p class="address">The Grand Palace, Na Phra Lan Road, Phra Borom Maha Ratchawang, Phra Nakhon, Bangkok 10200, Thailand</p>
+        <div class="meta">
+          <span>🕒 Grand Palace: daily 8:30 AM–4:30 PM; ticket sales to 3:30 PM</span>
+          <span>💸 Public reference: ฿500 (~₱932)</span>
+        </div>
+        <p class="note">The Temple of the Emerald Buddha (Wat Phra Kaew) is inside the Grand Palace complex, so these are shown as one physical stop.</p>
+        <ul class="tips"><li>This has the strictest dress code of the day: no sleeveless tops, shorts, torn/tight pants or mini skirts.</li><li>The public fee is a reference only—confirm package inclusion with your guide.</li></ul>
+        <details class="map-details">
+          <summary>📍 Show location map</summary>
+          <div class="map-wrap">
+            <iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps?q=The%20Grand%20Palace%2C%20Na%20Phra%20Lan%20Road%2C%20Phra%20Borom%20Maha%20Ratchawang%2C%20Phra%20Nakhon%2C%20Bangkok%2010200%2C%20Thailand&output=embed" title="Map for Grand Palace + Emerald Buddha" allowfullscreen></iframe>
+          </div>
+        </details>
+      </div>
+    </article>
+    
+    <article class="stop">
+      <div class="timebox"><b>~1:15 PM</b><span>~2:00 PM</span></div>
+      <div class="card">
+        <div class="title-row">
+          <div class="stop-title"><span class="letter">G</span><h3>🙏 Wat Pho — Reclining Buddha</h3></div>
+          <a class="small-btn" href="https://www.google.com/maps/search/?api=1&query=Wat%20Pho%2C%202%20Sanam%20Chai%20Rd%2C%20Phra%20Borom%20Maha%20Ratchawang%2C%20Phra%20Nakhon%2C%20Bangkok%2010200%2C%20Thailand" target="_blank" rel="noopener">Google Maps ↗</a>
+        </div>
+        <p class="address">Wat Pho, 2 Sanam Chai Rd, Phra Borom Maha Ratchawang, Phra Nakhon, Bangkok 10200, Thailand</p>
+        <div class="meta">
+          <span>🕒 Public visitor hours currently listed: 8:30 AM–7:30 PM</span>
+          <span>💸 Public reference: ฿300 (~₱559)</span>
+        </div>
+        <p class="note">Wat Pho sits beside the Grand Palace area, making this one of the easiest transitions in the day's sequence.</p>
+        <ul class="tips"><li>Look for the Reclining Buddha and the temple courtyards.</li><li>Again, wait for your guide before buying a separate ticket.</li></ul>
+        <details class="map-details">
+          <summary>📍 Show location map</summary>
+          <div class="map-wrap">
+            <iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps?q=Wat%20Pho%2C%202%20Sanam%20Chai%20Rd%2C%20Phra%20Borom%20Maha%20Ratchawang%2C%20Phra%20Nakhon%2C%20Bangkok%2010200%2C%20Thailand&output=embed" title="Map for Wat Pho — Reclining Buddha" allowfullscreen></iframe>
+          </div>
+        </details>
+      </div>
+    </article>
+    
+    <article class="stop">
+      <div class="timebox"><b>~2:25 PM</b><span>~3:05 PM</span></div>
+      <div class="card">
+        <div class="title-row">
+          <div class="stop-title"><span class="letter">H</span><h3>🤍 Marble Temple — Wat Benchamabophit</h3></div>
+          <a class="small-btn" href="https://www.google.com/maps/search/?api=1&query=Wat%20Benchamabophit%20Dusitwanaram%2C%2069%20Rama%20V%20Rd%2C%20Dusit%2C%20Bangkok%2010300%2C%20Thailand" target="_blank" rel="noopener">Google Maps ↗</a>
+        </div>
+        <p class="address">Wat Benchamabophit Dusitwanaram, 69 Rama V Rd, Dusit, Bangkok 10300, Thailand</p>
+        <div class="meta">
+          <span>🕒 Visitor hours vary by source; plan for daytime entry</span>
+          <span>💸 Public reference: about ฿100 (~₱186)</span>
+        </div>
+        <p class="note">Known for white Carrara marble, stained glass and a quieter atmosphere than the major riverside temple cluster.</p>
+        <ul class="tips"><li>Temple dress rules still apply.</li><li>This is the farthest north of the main sightseeing stops in the voucher sequence.</li></ul>
+        <details class="map-details">
+          <summary>📍 Show location map</summary>
+          <div class="map-wrap">
+            <iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps?q=Wat%20Benchamabophit%20Dusitwanaram%2C%2069%20Rama%20V%20Rd%2C%20Dusit%2C%20Bangkok%2010300%2C%20Thailand&output=embed" title="Map for Marble Temple — Wat Benchamabophit" allowfullscreen></iframe>
+          </div>
+        </details>
+      </div>
+    </article>
+    
+    <article class="stop">
+      <div class="timebox"><b>~3:30 PM</b><span>After tour</span></div>
+      <div class="card">
+        <div class="title-row">
+          <div class="stop-title"><span class="letter">I</span><h3>🛍️ Drop-off — Platinum Mall or Hotel</h3></div>
+          <a class="small-btn" href="https://www.google.com/maps/search/?api=1&query=The%20Platinum%20Fashion%20Mall%2C%20222%20Phetchaburi%20Rd%2C%20Thanon%20Phetchaburi%2C%20Ratchathewi%2C%20Bangkok%2010400%2C%20Thailand" target="_blank" rel="noopener">Google Maps ↗</a>
+        </div>
+        <p class="address">The Platinum Fashion Mall, 222 Phetchaburi Rd, Thanon Phetchaburi, Ratchathewi, Bangkok 10400, Thailand</p>
+        <div class="meta">
+          <span>🕒 Platinum Fashion Mall: 9:00 AM–8:00 PM</span>
+          <span>💸 Tour drop-off</span>
+        </div>
+        <p class="note">Your voucher says the guide can drop you at Platinum Mall or the hotel. If everyone still has energy, Platinum is convenient because it is close to PANNARAI Hotel.</p>
+        <ul class="tips"><li>If tired, choose the hotel.</li><li>If shopping, keep enough energy for the walk/short ride back to the hotel.</li></ul>
+        <details class="map-details">
+          <summary>📍 Show location map</summary>
+          <div class="map-wrap">
+            <iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps?q=The%20Platinum%20Fashion%20Mall%2C%20222%20Phetchaburi%20Rd%2C%20Thanon%20Phetchaburi%2C%20Ratchathewi%2C%20Bangkok%2010400%2C%20Thailand&output=embed" title="Map for Drop-off — Platinum Mall or Hotel" allowfullscreen></iframe>
+          </div>
+        </details>
+      </div>
+    </article>
+    
+  </section>
+
+  <section class="route-overview" id="route">
+    <h2>📍 Voucher sequence — A → I</h2>
+    <p class="route-intro">
+      This is a visual planning route. The operator may use a different road order, and Wat Arun may involve a ferry.
+      On mobile, the route becomes a vertical A↓B↓C list.
+    </p>
+
+    <div class="route-chain"><a class="route-node" href="https://www.google.com/maps/search/?api=1&query=PANNARAI%20HOTEL%20BANGKOK%20-%20PRATUNAM%2C%2099/8%20Ratchaprarop%20Rd%2C%20Makkasan%2C%20Ratchathewi%2C%20Bangkok%2010400%2C%20Thailand" target="_blank" rel="noopener"><span class="pin-letter">A</span><strong>PANNARAI Hotel — Pickup</strong><small>8:00 AM</small></a><div class="route-arrow" aria-hidden="true"></div><a class="route-node" href="https://www.google.com/maps/search/?api=1&query=Song%20Wat%20Road%2C%20Samphanthawong%2C%20Bangkok%2010100%2C%20Thailand" target="_blank" rel="noopener"><span class="pin-letter">B</span><strong>Song Wat Old Town Heritage Walking Street</strong><small>~8:30 AM</small></a><div class="route-arrow" aria-hidden="true"></div><a class="route-node" href="https://www.google.com/maps/search/?api=1&query=Wat%20Arun%20Ratchawararam%20Ratchawaramahawihan%2C%20158%20Wang%20Doem%20Rd%2C%20Wat%20Arun%2C%20Bangkok%20Yai%2C%20Bangkok%2010600%2C%20Thailand" target="_blank" rel="noopener"><span class="pin-letter">C</span><strong>Wat Arun — Temple of Dawn</strong><small>~9:20 AM</small></a><div class="route-arrow" aria-hidden="true"></div><a class="route-node" href="https://www.google.com/maps/search/?api=1&query=Gems%20Gallery%20Bangkok%2C%20Bangkok%2C%20Thailand" target="_blank" rel="noopener"><span class="pin-letter">D</span><strong>Gems Gallery Bangkok</strong><small>~10:25 AM</small></a><div class="route-arrow" aria-hidden="true"></div><a class="route-node" href="https://www.google.com/maps/search/?api=1&query=Honey%20Bee%20Garden%20Bangkok%2C%20Bangkok%2C%20Thailand" target="_blank" rel="noopener"><span class="pin-letter">E</span><strong>Honey Bee Garden</strong><small>~11:00 AM</small></a><div class="route-arrow" aria-hidden="true"></div><a class="route-node" href="https://www.google.com/maps/search/?api=1&query=The%20Grand%20Palace%2C%20Na%20Phra%20Lan%20Road%2C%20Phra%20Borom%20Maha%20Ratchawang%2C%20Phra%20Nakhon%2C%20Bangkok%2010200%2C%20Thailand" target="_blank" rel="noopener"><span class="pin-letter">F</span><strong>Grand Palace + Emerald Buddha</strong><small>~11:50 AM</small></a><div class="route-arrow" aria-hidden="true"></div><a class="route-node" href="https://www.google.com/maps/search/?api=1&query=Wat%20Pho%2C%202%20Sanam%20Chai%20Rd%2C%20Phra%20Borom%20Maha%20Ratchawang%2C%20Phra%20Nakhon%2C%20Bangkok%2010200%2C%20Thailand" target="_blank" rel="noopener"><span class="pin-letter">G</span><strong>Wat Pho — Reclining Buddha</strong><small>~1:15 PM</small></a><div class="route-arrow" aria-hidden="true"></div><a class="route-node" href="https://www.google.com/maps/search/?api=1&query=Wat%20Benchamabophit%20Dusitwanaram%2C%2069%20Rama%20V%20Rd%2C%20Dusit%2C%20Bangkok%2010300%2C%20Thailand" target="_blank" rel="noopener"><span class="pin-letter">H</span><strong>Marble Temple — Wat Benchamabophit</strong><small>~2:25 PM</small></a><div class="route-arrow" aria-hidden="true"></div><a class="route-node" href="https://www.google.com/maps/search/?api=1&query=The%20Platinum%20Fashion%20Mall%2C%20222%20Phetchaburi%20Rd%2C%20Thanon%20Phetchaburi%2C%20Ratchathewi%2C%20Bangkok%2010400%2C%20Thailand" target="_blank" rel="noopener"><span class="pin-letter">I</span><strong>Drop-off — Platinum Mall or Hotel</strong><small>~3:30 PM</small></a></div>
+
+    <div class="direction-box">
+      <div class="direction-head">
+        <h3>🧭 Embedded Google Maps directions</h3>
+        <p id="route-title">A → B: PANNARAI Hotel → Song Wat</p>
+      </div>
+      <div class="route-controls"><button class="route-chip active" type="button" data-map="https://www.google.com/maps?output=embed&saddr=PANNARAI%20HOTEL%20BANGKOK%20-%20PRATUNAM%2C%2099/8%20Ratchaprarop%20Rd%2C%20Makkasan%2C%20Ratchathewi%2C%20Bangkok%2010400%2C%20Thailand&daddr=Song%20Wat%20Road%2C%20Samphanthawong%2C%20Bangkok%2010100%2C%20Thailand&dirflg=d" data-title="A → B: PANNARAI Hotel — Pickup → Song Wat Old Town Heritage Walking Street">A→B</button><button class="route-chip" type="button" data-map="https://www.google.com/maps?output=embed&saddr=Song%20Wat%20Road%2C%20Samphanthawong%2C%20Bangkok%2010100%2C%20Thailand&daddr=Wat%20Arun%20Ratchawararam%20Ratchawaramahawihan%2C%20158%20Wang%20Doem%20Rd%2C%20Wat%20Arun%2C%20Bangkok%20Yai%2C%20Bangkok%2010600%2C%20Thailand&dirflg=d" data-title="B → C: Song Wat Old Town Heritage Walking Street → Wat Arun — Temple of Dawn">B→C</button><button class="route-chip" type="button" data-map="https://www.google.com/maps?output=embed&saddr=Wat%20Arun%20Ratchawararam%20Ratchawaramahawihan%2C%20158%20Wang%20Doem%20Rd%2C%20Wat%20Arun%2C%20Bangkok%20Yai%2C%20Bangkok%2010600%2C%20Thailand&daddr=Gems%20Gallery%20Bangkok%2C%20Bangkok%2C%20Thailand&dirflg=d" data-title="C → D: Wat Arun — Temple of Dawn → Gems Gallery Bangkok">C→D</button><button class="route-chip" type="button" data-map="https://www.google.com/maps?output=embed&saddr=Gems%20Gallery%20Bangkok%2C%20Bangkok%2C%20Thailand&daddr=Honey%20Bee%20Garden%20Bangkok%2C%20Bangkok%2C%20Thailand&dirflg=d" data-title="D → E: Gems Gallery Bangkok → Honey Bee Garden">D→E</button><button class="route-chip" type="button" data-map="https://www.google.com/maps?output=embed&saddr=Honey%20Bee%20Garden%20Bangkok%2C%20Bangkok%2C%20Thailand&daddr=The%20Grand%20Palace%2C%20Na%20Phra%20Lan%20Road%2C%20Phra%20Borom%20Maha%20Ratchawang%2C%20Phra%20Nakhon%2C%20Bangkok%2010200%2C%20Thailand&dirflg=d" data-title="E → F: Honey Bee Garden → Grand Palace + Emerald Buddha">E→F</button><button class="route-chip" type="button" data-map="https://www.google.com/maps?output=embed&saddr=The%20Grand%20Palace%2C%20Na%20Phra%20Lan%20Road%2C%20Phra%20Borom%20Maha%20Ratchawang%2C%20Phra%20Nakhon%2C%20Bangkok%2010200%2C%20Thailand&daddr=Wat%20Pho%2C%202%20Sanam%20Chai%20Rd%2C%20Phra%20Borom%20Maha%20Ratchawang%2C%20Phra%20Nakhon%2C%20Bangkok%2010200%2C%20Thailand&dirflg=d" data-title="F → G: Grand Palace + Emerald Buddha → Wat Pho — Reclining Buddha">F→G</button><button class="route-chip" type="button" data-map="https://www.google.com/maps?output=embed&saddr=Wat%20Pho%2C%202%20Sanam%20Chai%20Rd%2C%20Phra%20Borom%20Maha%20Ratchawang%2C%20Phra%20Nakhon%2C%20Bangkok%2010200%2C%20Thailand&daddr=Wat%20Benchamabophit%20Dusitwanaram%2C%2069%20Rama%20V%20Rd%2C%20Dusit%2C%20Bangkok%2010300%2C%20Thailand&dirflg=d" data-title="G → H: Wat Pho — Reclining Buddha → Marble Temple — Wat Benchamabophit">G→H</button><button class="route-chip" type="button" data-map="https://www.google.com/maps?output=embed&saddr=Wat%20Benchamabophit%20Dusitwanaram%2C%2069%20Rama%20V%20Rd%2C%20Dusit%2C%20Bangkok%2010300%2C%20Thailand&daddr=The%20Platinum%20Fashion%20Mall%2C%20222%20Phetchaburi%20Rd%2C%20Thanon%20Phetchaburi%2C%20Ratchathewi%2C%20Bangkok%2010400%2C%20Thailand&dirflg=d" data-title="H → I: Marble Temple — Wat Benchamabophit → Drop-off — Platinum Mall or Hotel">H→I</button></div>
+      <iframe id="route-map" class="direction-map"
+        src="https://www.google.com/maps?output=embed&saddr=PANNARAI%20HOTEL%20BANGKOK%20-%20PRATUNAM%2C%2099/8%20Ratchaprarop%20Rd%2C%20Makkasan%2C%20Ratchathewi%2C%20Bangkok%2010400%2C%20Thailand&daddr=Song%20Wat%20Road%2C%20Samphanthawong%2C%20Bangkok%2010100%2C%20Thailand&dirflg=d"
+        title="Google Maps directions for Day 8" loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+    </div>
+
+    <div class="route-note">
+      <strong>Drop-off choice:</strong> the voucher says <strong>Platinum Mall or your hotel</strong>.
+      If the group still wants to shop, Platinum is convenient because it is close to PANNARAI Hotel.
+      Otherwise, ask for the hotel drop-off.
+    </div>
+  </section>
+
+  <div class="footer">
+    <strong>Cost note:</strong> public attraction fees are shown only as reference amounts using
+    ฿1 ≈ ₱1.86. Do not buy separate tickets until the guide confirms what your package includes.
+    <br><br>
+    <strong>Map note:</strong> Gems Gallery and Honey Bee Garden are tour-arranged commercial stops;
+    the exact branch can be confirmed with the guide. Embedded Google Maps requires internet access.
+    This page retains <strong>noindex / nofollow</strong> tags.
+  </div>
+</main>
+
+<script>
+const routeMap=document.getElementById('route-map');
+const routeTitle=document.getElementById('route-title');
+document.querySelectorAll('.route-chip[data-map]').forEach((button)=>{
+  button.addEventListener('click',()=>{
+    document.querySelectorAll('.route-chip').forEach((b)=>b.classList.remove('active'));
+    button.classList.add('active');
+    routeMap.src=button.dataset.map;
+    routeTitle.textContent=button.dataset.title;
+    routeMap.scrollIntoView({behavior:'smooth',block:'center'});
+  });
+});
+</script>
+</body>
+</html>
