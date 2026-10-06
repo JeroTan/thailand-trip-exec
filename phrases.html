@@ -1,0 +1,941 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="bingbot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="theme-color" content="#173e79">
+<title>Phrases — Bangkok Trip</title>
+<style>
+:root {
+  --ink:#17233c; --muted:#647189; --blue:#24539a; --blue2:#173e79;
+  --paper:#f4f7fb; --card:#fff; --line:#dbe3ee; --green:#16714f;
+  --shadow:0 8px 24px rgba(27,48,83,.09);
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+body {
+  margin:0; background:var(--paper); color:var(--ink); overflow-x:hidden;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  line-height:1.5;
+}
+button,input { font:inherit; }
+.trip-nav {
+  position:sticky; top:0; z-index:9999; background:rgba(255,255,255,.96);
+  backdrop-filter:blur(12px); border-bottom:1px solid var(--line);
+  box-shadow:0 4px 16px rgba(27,48,83,.06);
+}
+.nav-inner {
+  width:min(1100px,100%); margin:0 auto; padding:9px 14px;
+  display:flex; align-items:center; gap:8px; overflow-x:auto; scrollbar-width:none;
+}
+.nav-inner::-webkit-scrollbar { display:none; }
+.trip-nav a {
+  flex:0 0 auto; text-decoration:none; color:var(--blue2); background:#f4f7fb;
+  border:1px solid var(--line); border-radius:999px; padding:8px 13px; min-height:38px;
+  display:inline-flex; align-items:center; justify-content:center; font-weight:800; font-size:.88rem;
+}
+.trip-nav .brand { border:0; background:transparent; padding-left:0; font-weight:900; }
+.trip-nav a.active { background:var(--blue); color:#fff; border-color:var(--blue); }
+
+header {
+  background:linear-gradient(135deg,var(--blue2),var(--blue)); color:#fff;
+  padding:38px 18px 32px;
+}
+.wrap { width:min(1100px,100%); margin:0 auto; }
+.eyebrow { text-transform:uppercase; letter-spacing:.13em; font-size:.76rem; font-weight:850; opacity:.82; }
+h1 { margin:.35rem 0 .55rem; font-size:clamp(2rem,7vw,3.5rem); line-height:1.04; }
+.subtitle { max-width:820px; margin:0; color:#e8efff; }
+.tip {
+  margin-top:16px; max-width:820px; padding:11px 13px; border-radius:11px;
+  background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.24);
+}
+
+main { padding:20px 18px 48px; }
+.tools {
+  position:sticky; top:57px; z-index:50; background:rgba(244,247,251,.96);
+  backdrop-filter:blur(10px); padding:8px 0 13px; margin-bottom:4px;
+}
+.search {
+  width:100%; min-height:46px; border:1px solid var(--line); border-radius:12px;
+  padding:10px 13px; background:#fff; color:var(--ink); outline:none;
+}
+.search:focus { border-color:#8ba7d5; box-shadow:0 0 0 3px rgba(36,83,154,.10); }
+.filters { display:flex; gap:7px; overflow-x:auto; padding:9px 0 2px; scrollbar-width:none; }
+.filters::-webkit-scrollbar { display:none; }
+.filter-btn {
+  flex:0 0 auto; border:1px solid #cbd7ea; background:#fff; color:var(--blue2);
+  border-radius:999px; padding:8px 11px; font-weight:800; cursor:pointer;
+}
+.filter-btn.active { background:var(--blue); color:#fff; border-color:var(--blue); }
+
+.phrase-grid {
+  display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px;
+}
+.phrase-card {
+  background:#fff; border:1px solid var(--line); border-radius:15px;
+  box-shadow:var(--shadow); padding:15px; min-width:0;
+}
+.phrase-top { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.category {
+  display:inline-flex; background:#eef5ff; color:#29486f; border-radius:999px;
+  padding:5px 8px; font-size:.72rem; font-weight:850;
+}
+.show-btn,.copy-btn {
+  border:1px solid #cbd7ea; background:#f7faff; color:var(--blue2);
+  border-radius:9px; min-height:36px; padding:7px 10px; font-weight:800; cursor:pointer;
+}
+.show-btn { font-size:.78rem; }
+.phrase-card h3 { margin:10px 0 5px; font-size:1.02rem; }
+.thai {
+  font-family:"Noto Sans Thai","Leelawadee UI",Tahoma,sans-serif;
+  font-size:1.45rem; font-weight:750; line-height:1.45; overflow-wrap:anywhere;
+}
+.pron { color:var(--green); font-weight:800; margin-top:3px; overflow-wrap:anywhere; }
+.note { color:var(--muted); margin:7px 0 0; font-size:.84rem; }
+.copy-btn { width:100%; margin-top:11px; }
+.copy-btn.copied { background:#eaf7f1; color:var(--green); border-color:#c9e9db; }
+
+.empty {
+  display:none; background:#fff; border:1px solid var(--line); border-radius:14px;
+  padding:20px; text-align:center; color:var(--muted);
+}
+
+.modal {
+  position:fixed; inset:0; z-index:20000; display:none; place-items:center;
+  padding:18px; background:rgba(11,22,40,.82);
+}
+.modal.open { display:grid; }
+.modal-card {
+  width:min(720px,100%); background:#fff; border-radius:20px; padding:24px;
+  text-align:center; position:relative;
+}
+.modal-english { font-size:1.05rem; color:var(--muted); margin-bottom:8px; }
+.modal-thai {
+  font-family:"Noto Sans Thai","Leelawadee UI",Tahoma,sans-serif;
+  font-size:clamp(2.5rem,9vw,5.7rem); font-weight:850; line-height:1.25; overflow-wrap:anywhere;
+}
+.close-btn {
+  margin-top:20px; width:100%; min-height:46px; border:0; border-radius:10px;
+  background:var(--blue); color:#fff; font-weight:850; cursor:pointer;
+}
+
+.footer-note {
+  margin-top:25px; background:#fff; border:1px solid var(--line); border-radius:14px;
+  padding:14px; color:var(--muted); font-size:.86rem;
+}
+
+@media(max-width:840px) {
+  .phrase-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media(max-width:560px) {
+  .nav-inner { padding:8px 10px; }
+  .trip-nav .brand { display:none; }
+  .trip-nav a { padding:8px 11px; font-size:.84rem; }
+  header { padding:28px 14px; }
+  main { padding:14px 12px 40px; }
+  .tools { top:54px; }
+  .phrase-grid { grid-template-columns:1fr; }
+  .phrase-card { padding:14px; }
+  .thai { font-size:1.55rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="trip-nav" aria-label="Bangkok trip pages">
+  <div class="nav-inner">
+    <a class="brand" href="./index.html">Bangkok Trip</a>
+    <a href="./day7.html">Day 7</a>
+    <a href="./day8.html">Day 8</a>
+    <a href="./day9.html">Day 9</a>
+    <a href="./day10.html">Day 10</a>
+    <a href="./transport.html">Transport</a>
+    <a href="./phrases.html" class="active" aria-current="page">Phrases</a>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Bangkok Trip • Quick Thai</div>
+    <h1>Phrases</h1>
+    <p class="subtitle">
+      Quick Thai phrases for your group. Search by English, Thai, or pronunciation.
+      Tap <strong>Show</strong> to make the Thai text large enough to show someone directly.
+    </p>
+    <div class="tip">
+      <strong>Politeness:</strong> if you are male, you can end polite sentences with <strong>ครับ (khráp)</strong>.
+      If you are female, use <strong>ค่ะ (khâ)</strong> for statements and often <strong>คะ (khá)</strong> for questions.
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="tools">
+    <input id="phrase-search" class="search" type="search"
+      placeholder="Search: bathroom, taxi, spicy, how much..." autocomplete="off"
+      aria-label="Search phrases">
+    <div class="filters"><button class="filter-btn active" type="button" data-filter="All">All</button><button class="filter-btn" type="button" data-filter="General">General</button><button class="filter-btn" type="button" data-filter="Transport">Transport</button><button class="filter-btn" type="button" data-filter="Food">Food</button><button class="filter-btn" type="button" data-filter="Shopping">Shopping</button><button class="filter-btn" type="button" data-filter="Hotel">Hotel</button><button class="filter-btn" type="button" data-filter="Emergency">Emergency</button></div>
+  </section>
+
+  <section id="phrase-grid" class="phrase-grid">
+    
+    <article class="phrase-card" data-category="General" data-search="hello สวัสดีครับ / สวัสดีค่ะ sa-wat-dee khráp / khâ">
+      <div class="phrase-top">
+        <span class="category">General</span>
+        <button class="show-btn" type="button"
+          data-thai="สวัสดีครับ / สวัสดีค่ะ"
+          data-english="Hello"
+          aria-label="Show Hello full screen">Show</button>
+      </div>
+      <h3>Hello</h3>
+      <div class="thai" lang="th">สวัสดีครับ / สวัสดีค่ะ</div>
+      <div class="pron">sa-wat-dee khráp / khâ</div>
+      <p class="note">Polite greeting.</p>
+      <button class="copy-btn" type="button" data-copy="สวัสดีครับ / สวัสดีค่ะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="General" data-search="thank you ขอบคุณครับ / ขอบคุณค่ะ khop khun khráp / khâ">
+      <div class="phrase-top">
+        <span class="category">General</span>
+        <button class="show-btn" type="button"
+          data-thai="ขอบคุณครับ / ขอบคุณค่ะ"
+          data-english="Thank you"
+          aria-label="Show Thank you full screen">Show</button>
+      </div>
+      <h3>Thank you</h3>
+      <div class="thai" lang="th">ขอบคุณครับ / ขอบคุณค่ะ</div>
+      <div class="pron">khop khun khráp / khâ</div>
+      <p class="note">Use this a lot.</p>
+      <button class="copy-btn" type="button" data-copy="ขอบคุณครับ / ขอบคุณค่ะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="General" data-search="excuse me / sorry ขอโทษครับ / ขอโทษค่ะ khor thot khráp / khâ">
+      <div class="phrase-top">
+        <span class="category">General</span>
+        <button class="show-btn" type="button"
+          data-thai="ขอโทษครับ / ขอโทษค่ะ"
+          data-english="Excuse me / Sorry"
+          aria-label="Show Excuse me / Sorry full screen">Show</button>
+      </div>
+      <h3>Excuse me / Sorry</h3>
+      <div class="thai" lang="th">ขอโทษครับ / ขอโทษค่ะ</div>
+      <div class="pron">khor thot khráp / khâ</div>
+      <p class="note">For apologies or getting someone&#x27;s attention.</p>
+      <button class="copy-btn" type="button" data-copy="ขอโทษครับ / ขอโทษค่ะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="General" data-search="it&#x27;s okay / no worries ไม่เป็นไร mai pen rai">
+      <div class="phrase-top">
+        <span class="category">General</span>
+        <button class="show-btn" type="button"
+          data-thai="ไม่เป็นไร"
+          data-english="It&#x27;s okay / No worries"
+          aria-label="Show It&#x27;s okay / No worries full screen">Show</button>
+      </div>
+      <h3>It&#x27;s okay / No worries</h3>
+      <div class="thai" lang="th">ไม่เป็นไร</div>
+      <div class="pron">mai pen rai</div>
+      <p class="note">Very common and useful.</p>
+      <button class="copy-btn" type="button" data-copy="ไม่เป็นไร">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="General" data-search="yes ใช่ chai">
+      <div class="phrase-top">
+        <span class="category">General</span>
+        <button class="show-btn" type="button"
+          data-thai="ใช่"
+          data-english="Yes"
+          aria-label="Show Yes full screen">Show</button>
+      </div>
+      <h3>Yes</h3>
+      <div class="thai" lang="th">ใช่</div>
+      <div class="pron">chai</div>
+      
+      <button class="copy-btn" type="button" data-copy="ใช่">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="General" data-search="no / not ไม่ mai">
+      <div class="phrase-top">
+        <span class="category">General</span>
+        <button class="show-btn" type="button"
+          data-thai="ไม่"
+          data-english="No / Not"
+          aria-label="Show No / Not full screen">Show</button>
+      </div>
+      <h3>No / Not</h3>
+      <div class="thai" lang="th">ไม่</div>
+      <div class="pron">mai</div>
+      
+      <button class="copy-btn" type="button" data-copy="ไม่">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="General" data-search="i don&#x27;t understand ไม่เข้าใจ mai khao jai">
+      <div class="phrase-top">
+        <span class="category">General</span>
+        <button class="show-btn" type="button"
+          data-thai="ไม่เข้าใจ"
+          data-english="I don&#x27;t understand"
+          aria-label="Show I don&#x27;t understand full screen">Show</button>
+      </div>
+      <h3>I don&#x27;t understand</h3>
+      <div class="thai" lang="th">ไม่เข้าใจ</div>
+      <div class="pron">mai khao jai</div>
+      
+      <button class="copy-btn" type="button" data-copy="ไม่เข้าใจ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="General" data-search="do you speak english? พูดอังกฤษได้ไหมครับ / คะ phut ang-grit dai mai khráp / khá">
+      <div class="phrase-top">
+        <span class="category">General</span>
+        <button class="show-btn" type="button"
+          data-thai="พูดอังกฤษได้ไหมครับ / คะ"
+          data-english="Do you speak English?"
+          aria-label="Show Do you speak English? full screen">Show</button>
+      </div>
+      <h3>Do you speak English?</h3>
+      <div class="thai" lang="th">พูดอังกฤษได้ไหมครับ / คะ</div>
+      <div class="pron">phut ang-grit dai mai khráp / khá</div>
+      
+      <button class="copy-btn" type="button" data-copy="พูดอังกฤษได้ไหมครับ / คะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="General" data-search="please speak slowly พูดช้าๆ หน่อยครับ / ค่ะ phut cha-cha noi khráp / khâ">
+      <div class="phrase-top">
+        <span class="category">General</span>
+        <button class="show-btn" type="button"
+          data-thai="พูดช้าๆ หน่อยครับ / ค่ะ"
+          data-english="Please speak slowly"
+          aria-label="Show Please speak slowly full screen">Show</button>
+      </div>
+      <h3>Please speak slowly</h3>
+      <div class="thai" lang="th">พูดช้าๆ หน่อยครับ / ค่ะ</div>
+      <div class="pron">phut cha-cha noi khráp / khâ</div>
+      
+      <button class="copy-btn" type="button" data-copy="พูดช้าๆ หน่อยครับ / ค่ะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="General" data-search="can you help me? ช่วยหน่อยได้ไหมครับ / คะ chuay noi dai mai khráp / khá">
+      <div class="phrase-top">
+        <span class="category">General</span>
+        <button class="show-btn" type="button"
+          data-thai="ช่วยหน่อยได้ไหมครับ / คะ"
+          data-english="Can you help me?"
+          aria-label="Show Can you help me? full screen">Show</button>
+      </div>
+      <h3>Can you help me?</h3>
+      <div class="thai" lang="th">ช่วยหน่อยได้ไหมครับ / คะ</div>
+      <div class="pron">chuay noi dai mai khráp / khá</div>
+      
+      <button class="copy-btn" type="button" data-copy="ช่วยหน่อยได้ไหมครับ / คะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="General" data-search="where is ...? ... อยู่ที่ไหนครับ / คะ ... yuu tee nai khráp / khá">
+      <div class="phrase-top">
+        <span class="category">General</span>
+        <button class="show-btn" type="button"
+          data-thai="... อยู่ที่ไหนครับ / คะ"
+          data-english="Where is ...?"
+          aria-label="Show Where is ...? full screen">Show</button>
+      </div>
+      <h3>Where is ...?</h3>
+      <div class="thai" lang="th">... อยู่ที่ไหนครับ / คะ</div>
+      <div class="pron">... yuu tee nai khráp / khá</div>
+      
+      <button class="copy-btn" type="button" data-copy="... อยู่ที่ไหนครับ / คะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="General" data-search="where is the bathroom? ห้องน้ำอยู่ที่ไหนครับ / คะ hong nam yuu tee nai khráp / khá">
+      <div class="phrase-top">
+        <span class="category">General</span>
+        <button class="show-btn" type="button"
+          data-thai="ห้องน้ำอยู่ที่ไหนครับ / คะ"
+          data-english="Where is the bathroom?"
+          aria-label="Show Where is the bathroom? full screen">Show</button>
+      </div>
+      <h3>Where is the bathroom?</h3>
+      <div class="thai" lang="th">ห้องน้ำอยู่ที่ไหนครับ / คะ</div>
+      <div class="pron">hong nam yuu tee nai khráp / khá</div>
+      
+      <button class="copy-btn" type="button" data-copy="ห้องน้ำอยู่ที่ไหนครับ / คะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Transport" data-search="please go here ไปที่นี่ครับ / ค่ะ pai tee nee khráp / khâ">
+      <div class="phrase-top">
+        <span class="category">Transport</span>
+        <button class="show-btn" type="button"
+          data-thai="ไปที่นี่ครับ / ค่ะ"
+          data-english="Please go here"
+          aria-label="Show Please go here full screen">Show</button>
+      </div>
+      <h3>Please go here</h3>
+      <div class="thai" lang="th">ไปที่นี่ครับ / ค่ะ</div>
+      <div class="pron">pai tee nee khráp / khâ</div>
+      <p class="note">Show the driver the place on your phone.</p>
+      <button class="copy-btn" type="button" data-copy="ไปที่นี่ครับ / ค่ะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Transport" data-search="stop here, please จอดตรงนี้ครับ / ค่ะ jot trong nee khráp / khâ">
+      <div class="phrase-top">
+        <span class="category">Transport</span>
+        <button class="show-btn" type="button"
+          data-thai="จอดตรงนี้ครับ / ค่ะ"
+          data-english="Stop here, please"
+          aria-label="Show Stop here, please full screen">Show</button>
+      </div>
+      <h3>Stop here, please</h3>
+      <div class="thai" lang="th">จอดตรงนี้ครับ / ค่ะ</div>
+      <div class="pron">jot trong nee khráp / khâ</div>
+      
+      <button class="copy-btn" type="button" data-copy="จอดตรงนี้ครับ / ค่ะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Transport" data-search="how much to go there? ไปที่นั่นเท่าไหร่ครับ / คะ pai tee nan tao rai khráp / khá">
+      <div class="phrase-top">
+        <span class="category">Transport</span>
+        <button class="show-btn" type="button"
+          data-thai="ไปที่นั่นเท่าไหร่ครับ / คะ"
+          data-english="How much to go there?"
+          aria-label="Show How much to go there? full screen">Show</button>
+      </div>
+      <h3>How much to go there?</h3>
+      <div class="thai" lang="th">ไปที่นั่นเท่าไหร่ครับ / คะ</div>
+      <div class="pron">pai tee nan tao rai khráp / khá</div>
+      
+      <button class="copy-btn" type="button" data-copy="ไปที่นั่นเท่าไหร่ครับ / คะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Transport" data-search="please use the meter เปิดมิเตอร์ด้วยครับ / ค่ะ poet meter duay khráp / khâ">
+      <div class="phrase-top">
+        <span class="category">Transport</span>
+        <button class="show-btn" type="button"
+          data-thai="เปิดมิเตอร์ด้วยครับ / ค่ะ"
+          data-english="Please use the meter"
+          aria-label="Show Please use the meter full screen">Show</button>
+      </div>
+      <h3>Please use the meter</h3>
+      <div class="thai" lang="th">เปิดมิเตอร์ด้วยครับ / ค่ะ</div>
+      <div class="pron">poet meter duay khráp / khâ</div>
+      <p class="note">Useful for metered taxis.</p>
+      <button class="copy-btn" type="button" data-copy="เปิดมิเตอร์ด้วยครับ / ค่ะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Transport" data-search="bts station สถานีบีทีเอส sa-tha-nee bee-tee-es">
+      <div class="phrase-top">
+        <span class="category">Transport</span>
+        <button class="show-btn" type="button"
+          data-thai="สถานีบีทีเอส"
+          data-english="BTS station"
+          aria-label="Show BTS station full screen">Show</button>
+      </div>
+      <h3>BTS station</h3>
+      <div class="thai" lang="th">สถานีบีทีเอส</div>
+      <div class="pron">sa-tha-nee bee-tee-es</div>
+      
+      <button class="copy-btn" type="button" data-copy="สถานีบีทีเอส">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Transport" data-search="mrt station สถานีเอ็มอาร์ที sa-tha-nee em-ar-tee">
+      <div class="phrase-top">
+        <span class="category">Transport</span>
+        <button class="show-btn" type="button"
+          data-thai="สถานีเอ็มอาร์ที"
+          data-english="MRT station"
+          aria-label="Show MRT station full screen">Show</button>
+      </div>
+      <h3>MRT station</h3>
+      <div class="thai" lang="th">สถานีเอ็มอาร์ที</div>
+      <div class="pron">sa-tha-nee em-ar-tee</div>
+      
+      <button class="copy-btn" type="button" data-copy="สถานีเอ็มอาร์ที">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Transport" data-search="airport สนามบิน sa-nam bin">
+      <div class="phrase-top">
+        <span class="category">Transport</span>
+        <button class="show-btn" type="button"
+          data-thai="สนามบิน"
+          data-english="Airport"
+          aria-label="Show Airport full screen">Show</button>
+      </div>
+      <h3>Airport</h3>
+      <div class="thai" lang="th">สนามบิน</div>
+      <div class="pron">sa-nam bin</div>
+      
+      <button class="copy-btn" type="button" data-copy="สนามบิน">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Transport" data-search="don mueang airport สนามบินดอนเมือง sa-nam bin don mueang">
+      <div class="phrase-top">
+        <span class="category">Transport</span>
+        <button class="show-btn" type="button"
+          data-thai="สนามบินดอนเมือง"
+          data-english="Don Mueang Airport"
+          aria-label="Show Don Mueang Airport full screen">Show</button>
+      </div>
+      <h3>Don Mueang Airport</h3>
+      <div class="thai" lang="th">สนามบินดอนเมือง</div>
+      <div class="pron">sa-nam bin Don Mueang</div>
+      
+      <button class="copy-btn" type="button" data-copy="สนามบินดอนเมือง">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Transport" data-search="ratchaprarop station สถานีราชปรารภ sa-tha-nee ratchaprarop">
+      <div class="phrase-top">
+        <span class="category">Transport</span>
+        <button class="show-btn" type="button"
+          data-thai="สถานีราชปรารภ"
+          data-english="Ratchaprarop Station"
+          aria-label="Show Ratchaprarop Station full screen">Show</button>
+      </div>
+      <h3>Ratchaprarop Station</h3>
+      <div class="thai" lang="th">สถานีราชปรารภ</div>
+      <div class="pron">sa-tha-nee Ratchaprarop</div>
+      
+      <button class="copy-btn" type="button" data-copy="สถานีราชปรารภ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Food" data-search="not spicy, please ไม่เผ็ดครับ / ค่ะ mai phet khráp / khâ">
+      <div class="phrase-top">
+        <span class="category">Food</span>
+        <button class="show-btn" type="button"
+          data-thai="ไม่เผ็ดครับ / ค่ะ"
+          data-english="Not spicy, please"
+          aria-label="Show Not spicy, please full screen">Show</button>
+      </div>
+      <h3>Not spicy, please</h3>
+      <div class="thai" lang="th">ไม่เผ็ดครับ / ค่ะ</div>
+      <div class="pron">mai phet khráp / khâ</div>
+      
+      <button class="copy-btn" type="button" data-copy="ไม่เผ็ดครับ / ค่ะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Food" data-search="a little spicy เผ็ดนิดหน่อย phet nit noi">
+      <div class="phrase-top">
+        <span class="category">Food</span>
+        <button class="show-btn" type="button"
+          data-thai="เผ็ดนิดหน่อย"
+          data-english="A little spicy"
+          aria-label="Show A little spicy full screen">Show</button>
+      </div>
+      <h3>A little spicy</h3>
+      <div class="thai" lang="th">เผ็ดนิดหน่อย</div>
+      <div class="pron">phet nit noi</div>
+      
+      <button class="copy-btn" type="button" data-copy="เผ็ดนิดหน่อย">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Food" data-search="delicious! อร่อยมาก a-roi mak">
+      <div class="phrase-top">
+        <span class="category">Food</span>
+        <button class="show-btn" type="button"
+          data-thai="อร่อยมาก"
+          data-english="Delicious!"
+          aria-label="Show Delicious! full screen">Show</button>
+      </div>
+      <h3>Delicious!</h3>
+      <div class="thai" lang="th">อร่อยมาก</div>
+      <div class="pron">a-roi mak</div>
+      
+      <button class="copy-btn" type="button" data-copy="อร่อยมาก">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Food" data-search="water, please ขอน้ำหน่อยครับ / ค่ะ khor nam noi khráp / khâ">
+      <div class="phrase-top">
+        <span class="category">Food</span>
+        <button class="show-btn" type="button"
+          data-thai="ขอน้ำหน่อยครับ / ค่ะ"
+          data-english="Water, please"
+          aria-label="Show Water, please full screen">Show</button>
+      </div>
+      <h3>Water, please</h3>
+      <div class="thai" lang="th">ขอน้ำหน่อยครับ / ค่ะ</div>
+      <div class="pron">khor nam noi khráp / khâ</div>
+      
+      <button class="copy-btn" type="button" data-copy="ขอน้ำหน่อยครับ / ค่ะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Food" data-search="bill / check, please เช็คบิลด้วยครับ / ค่ะ check bin duay khráp / khâ">
+      <div class="phrase-top">
+        <span class="category">Food</span>
+        <button class="show-btn" type="button"
+          data-thai="เช็คบิลด้วยครับ / ค่ะ"
+          data-english="Bill / check, please"
+          aria-label="Show Bill / check, please full screen">Show</button>
+      </div>
+      <h3>Bill / check, please</h3>
+      <div class="thai" lang="th">เช็คบิลด้วยครับ / ค่ะ</div>
+      <div class="pron">check bin duay khráp / khâ</div>
+      
+      <button class="copy-btn" type="button" data-copy="เช็คบิลด้วยครับ / ค่ะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Food" data-search="no ice, please ไม่ใส่น้ำแข็งครับ / ค่ะ mai sai nam-khaeng khráp / khâ">
+      <div class="phrase-top">
+        <span class="category">Food</span>
+        <button class="show-btn" type="button"
+          data-thai="ไม่ใส่น้ำแข็งครับ / ค่ะ"
+          data-english="No ice, please"
+          aria-label="Show No ice, please full screen">Show</button>
+      </div>
+      <h3>No ice, please</h3>
+      <div class="thai" lang="th">ไม่ใส่น้ำแข็งครับ / ค่ะ</div>
+      <div class="pron">mai sai nam-khaeng khráp / khâ</div>
+      
+      <button class="copy-btn" type="button" data-copy="ไม่ใส่น้ำแข็งครับ / ค่ะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Food" data-search="takeaway, please ใส่กลับบ้านครับ / ค่ะ sai glap baan khráp / khâ">
+      <div class="phrase-top">
+        <span class="category">Food</span>
+        <button class="show-btn" type="button"
+          data-thai="ใส่กลับบ้านครับ / ค่ะ"
+          data-english="Takeaway, please"
+          aria-label="Show Takeaway, please full screen">Show</button>
+      </div>
+      <h3>Takeaway, please</h3>
+      <div class="thai" lang="th">ใส่กลับบ้านครับ / ค่ะ</div>
+      <div class="pron">sai glap baan khráp / khâ</div>
+      <p class="note">Ask for food to go.</p>
+      <button class="copy-btn" type="button" data-copy="ใส่กลับบ้านครับ / ค่ะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Shopping" data-search="how much? เท่าไหร่ครับ / คะ tao rai khráp / khá">
+      <div class="phrase-top">
+        <span class="category">Shopping</span>
+        <button class="show-btn" type="button"
+          data-thai="เท่าไหร่ครับ / คะ"
+          data-english="How much?"
+          aria-label="Show How much? full screen">Show</button>
+      </div>
+      <h3>How much?</h3>
+      <div class="thai" lang="th">เท่าไหร่ครับ / คะ</div>
+      <div class="pron">tao rai khráp / khá</div>
+      
+      <button class="copy-btn" type="button" data-copy="เท่าไหร่ครับ / คะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Shopping" data-search="can it be cheaper? ลดได้ไหมครับ / คะ lot dai mai khráp / khá">
+      <div class="phrase-top">
+        <span class="category">Shopping</span>
+        <button class="show-btn" type="button"
+          data-thai="ลดได้ไหมครับ / คะ"
+          data-english="Can it be cheaper?"
+          aria-label="Show Can it be cheaper? full screen">Show</button>
+      </div>
+      <h3>Can it be cheaper?</h3>
+      <div class="thai" lang="th">ลดได้ไหมครับ / คะ</div>
+      <div class="pron">lot dai mai khráp / khá</div>
+      <p class="note">Best for markets; not usually for fixed-price malls.</p>
+      <button class="copy-btn" type="button" data-copy="ลดได้ไหมครับ / คะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Shopping" data-search="too expensive แพงไป paeng pai">
+      <div class="phrase-top">
+        <span class="category">Shopping</span>
+        <button class="show-btn" type="button"
+          data-thai="แพงไป"
+          data-english="Too expensive"
+          aria-label="Show Too expensive full screen">Show</button>
+      </div>
+      <h3>Too expensive</h3>
+      <div class="thai" lang="th">แพงไป</div>
+      <div class="pron">paeng pai</div>
+      
+      <button class="copy-btn" type="button" data-copy="แพงไป">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Shopping" data-search="i&#x27;ll take this one เอาอันนี้ครับ / ค่ะ ao an nee khráp / khâ">
+      <div class="phrase-top">
+        <span class="category">Shopping</span>
+        <button class="show-btn" type="button"
+          data-thai="เอาอันนี้ครับ / ค่ะ"
+          data-english="I&#x27;ll take this one"
+          aria-label="Show I&#x27;ll take this one full screen">Show</button>
+      </div>
+      <h3>I&#x27;ll take this one</h3>
+      <div class="thai" lang="th">เอาอันนี้ครับ / ค่ะ</div>
+      <div class="pron">ao an nee khráp / khâ</div>
+      
+      <button class="copy-btn" type="button" data-copy="เอาอันนี้ครับ / ค่ะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Shopping" data-search="i don&#x27;t want this ไม่เอาครับ / ค่ะ mai ao khráp / khâ">
+      <div class="phrase-top">
+        <span class="category">Shopping</span>
+        <button class="show-btn" type="button"
+          data-thai="ไม่เอาครับ / ค่ะ"
+          data-english="I don&#x27;t want this"
+          aria-label="Show I don&#x27;t want this full screen">Show</button>
+      </div>
+      <h3>I don&#x27;t want this</h3>
+      <div class="thai" lang="th">ไม่เอาครับ / ค่ะ</div>
+      <div class="pron">mai ao khráp / khâ</div>
+      
+      <button class="copy-btn" type="button" data-copy="ไม่เอาครับ / ค่ะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Shopping" data-search="do you have another color? มีสีอื่นไหมครับ / คะ mee see eun mai khráp / khá">
+      <div class="phrase-top">
+        <span class="category">Shopping</span>
+        <button class="show-btn" type="button"
+          data-thai="มีสีอื่นไหมครับ / คะ"
+          data-english="Do you have another color?"
+          aria-label="Show Do you have another color? full screen">Show</button>
+      </div>
+      <h3>Do you have another color?</h3>
+      <div class="thai" lang="th">มีสีอื่นไหมครับ / คะ</div>
+      <div class="pron">mee see eun mai khráp / khá</div>
+      
+      <button class="copy-btn" type="button" data-copy="มีสีอื่นไหมครับ / คะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Shopping" data-search="can i have a receipt? ขอใบเสร็จได้ไหมครับ / คะ khor bai-set dai mai khráp / khá">
+      <div class="phrase-top">
+        <span class="category">Shopping</span>
+        <button class="show-btn" type="button"
+          data-thai="ขอใบเสร็จได้ไหมครับ / คะ"
+          data-english="Can I have a receipt?"
+          aria-label="Show Can I have a receipt? full screen">Show</button>
+      </div>
+      <h3>Can I have a receipt?</h3>
+      <div class="thai" lang="th">ขอใบเสร็จได้ไหมครับ / คะ</div>
+      <div class="pron">khor bai-set dai mai khráp / khá</div>
+      
+      <button class="copy-btn" type="button" data-copy="ขอใบเสร็จได้ไหมครับ / คะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Hotel" data-search="i have a reservation มีการจองไว้ครับ / ค่ะ mee gaan jong wai khráp / khâ">
+      <div class="phrase-top">
+        <span class="category">Hotel</span>
+        <button class="show-btn" type="button"
+          data-thai="มีการจองไว้ครับ / ค่ะ"
+          data-english="I have a reservation"
+          aria-label="Show I have a reservation full screen">Show</button>
+      </div>
+      <h3>I have a reservation</h3>
+      <div class="thai" lang="th">มีการจองไว้ครับ / ค่ะ</div>
+      <div class="pron">mee gaan jong wai khráp / khâ</div>
+      
+      <button class="copy-btn" type="button" data-copy="มีการจองไว้ครับ / ค่ะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Hotel" data-search="can you call a taxi? ช่วยเรียกแท็กซี่ให้หน่อยครับ / ค่ะ chuay riak taxi hai noi khráp / khâ">
+      <div class="phrase-top">
+        <span class="category">Hotel</span>
+        <button class="show-btn" type="button"
+          data-thai="ช่วยเรียกแท็กซี่ให้หน่อยครับ / ค่ะ"
+          data-english="Can you call a taxi?"
+          aria-label="Show Can you call a taxi? full screen">Show</button>
+      </div>
+      <h3>Can you call a taxi?</h3>
+      <div class="thai" lang="th">ช่วยเรียกแท็กซี่ให้หน่อยครับ / ค่ะ</div>
+      <div class="pron">chuay riak taxi hai noi khráp / khâ</div>
+      
+      <button class="copy-btn" type="button" data-copy="ช่วยเรียกแท็กซี่ให้หน่อยครับ / ค่ะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Hotel" data-search="can i leave my luggage here? ฝากกระเป๋าไว้ที่นี่ได้ไหมครับ / คะ faak gra-pao wai tee nee dai mai khráp / khá">
+      <div class="phrase-top">
+        <span class="category">Hotel</span>
+        <button class="show-btn" type="button"
+          data-thai="ฝากกระเป๋าไว้ที่นี่ได้ไหมครับ / คะ"
+          data-english="Can I leave my luggage here?"
+          aria-label="Show Can I leave my luggage here? full screen">Show</button>
+      </div>
+      <h3>Can I leave my luggage here?</h3>
+      <div class="thai" lang="th">ฝากกระเป๋าไว้ที่นี่ได้ไหมครับ / คะ</div>
+      <div class="pron">faak gra-pao wai tee nee dai mai khráp / khá</div>
+      
+      <button class="copy-btn" type="button" data-copy="ฝากกระเป๋าไว้ที่นี่ได้ไหมครับ / คะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Hotel" data-search="what time is check-out? เช็คเอาท์กี่โมงครับ / คะ check-out gee mong khráp / khá">
+      <div class="phrase-top">
+        <span class="category">Hotel</span>
+        <button class="show-btn" type="button"
+          data-thai="เช็คเอาท์กี่โมงครับ / คะ"
+          data-english="What time is check-out?"
+          aria-label="Show What time is check-out? full screen">Show</button>
+      </div>
+      <h3>What time is check-out?</h3>
+      <div class="thai" lang="th">เช็คเอาท์กี่โมงครับ / คะ</div>
+      <div class="pron">check-out gee mong khráp / khá</div>
+      
+      <button class="copy-btn" type="button" data-copy="เช็คเอาท์กี่โมงครับ / คะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Emergency" data-search="please help me ช่วยด้วยครับ / ค่ะ chuay duay khráp / khâ">
+      <div class="phrase-top">
+        <span class="category">Emergency</span>
+        <button class="show-btn" type="button"
+          data-thai="ช่วยด้วยครับ / ค่ะ"
+          data-english="Please help me"
+          aria-label="Show Please help me full screen">Show</button>
+      </div>
+      <h3>Please help me</h3>
+      <div class="thai" lang="th">ช่วยด้วยครับ / ค่ะ</div>
+      <div class="pron">chuay duay khráp / khâ</div>
+      
+      <button class="copy-btn" type="button" data-copy="ช่วยด้วยครับ / ค่ะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Emergency" data-search="i need a doctor ต้องการหมอครับ / ค่ะ tong gaan mor khráp / khâ">
+      <div class="phrase-top">
+        <span class="category">Emergency</span>
+        <button class="show-btn" type="button"
+          data-thai="ต้องการหมอครับ / ค่ะ"
+          data-english="I need a doctor"
+          aria-label="Show I need a doctor full screen">Show</button>
+      </div>
+      <h3>I need a doctor</h3>
+      <div class="thai" lang="th">ต้องการหมอครับ / ค่ะ</div>
+      <div class="pron">tong gaan mor khráp / khâ</div>
+      
+      <button class="copy-btn" type="button" data-copy="ต้องการหมอครับ / ค่ะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Emergency" data-search="where is the hospital? โรงพยาบาลอยู่ที่ไหนครับ / คะ rong pha-yaa-baan yuu tee nai khráp / khá">
+      <div class="phrase-top">
+        <span class="category">Emergency</span>
+        <button class="show-btn" type="button"
+          data-thai="โรงพยาบาลอยู่ที่ไหนครับ / คะ"
+          data-english="Where is the hospital?"
+          aria-label="Show Where is the hospital? full screen">Show</button>
+      </div>
+      <h3>Where is the hospital?</h3>
+      <div class="thai" lang="th">โรงพยาบาลอยู่ที่ไหนครับ / คะ</div>
+      <div class="pron">rong pha-yaa-baan yuu tee nai khráp / khá</div>
+      
+      <button class="copy-btn" type="button" data-copy="โรงพยาบาลอยู่ที่ไหนครับ / คะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Emergency" data-search="i am lost หลงทางครับ / ค่ะ long thaang khráp / khâ">
+      <div class="phrase-top">
+        <span class="category">Emergency</span>
+        <button class="show-btn" type="button"
+          data-thai="หลงทางครับ / ค่ะ"
+          data-english="I am lost"
+          aria-label="Show I am lost full screen">Show</button>
+      </div>
+      <h3>I am lost</h3>
+      <div class="thai" lang="th">หลงทางครับ / ค่ะ</div>
+      <div class="pron">long thaang khráp / khâ</div>
+      
+      <button class="copy-btn" type="button" data-copy="หลงทางครับ / ค่ะ">Copy Thai</button>
+    </article>
+    
+    <article class="phrase-card" data-category="Emergency" data-search="please call the police ช่วยเรียกตำรวจให้หน่อยครับ / ค่ะ chuay riak tam-ruat hai noi khráp / khâ">
+      <div class="phrase-top">
+        <span class="category">Emergency</span>
+        <button class="show-btn" type="button"
+          data-thai="ช่วยเรียกตำรวจให้หน่อยครับ / ค่ะ"
+          data-english="Please call the police"
+          aria-label="Show Please call the police full screen">Show</button>
+      </div>
+      <h3>Please call the police</h3>
+      <div class="thai" lang="th">ช่วยเรียกตำรวจให้หน่อยครับ / ค่ะ</div>
+      <div class="pron">chuay riak tam-ruat hai noi khráp / khâ</div>
+      
+      <button class="copy-btn" type="button" data-copy="ช่วยเรียกตำรวจให้หน่อยครับ / ค่ะ">Copy Thai</button>
+    </article>
+    
+  </section>
+
+  <div id="empty" class="empty">No matching phrase found.</div>
+
+  <div class="footer-note">
+    <strong>Pronunciation note:</strong> the English spellings are travel-friendly approximations, not perfect Thai phonetics.
+    If pronunciation is difficult, use the <strong>Show</strong> button and let the person read the Thai text.
+  </div>
+</main>
+
+<div id="phrase-modal" class="modal" role="dialog" aria-modal="true" aria-label="Large Thai phrase">
+  <div class="modal-card">
+    <div id="modal-english" class="modal-english"></div>
+    <div id="modal-thai" class="modal-thai" lang="th"></div>
+    <button id="close-modal" class="close-btn" type="button">Close</button>
+  </div>
+</div>
+
+<script>
+const search = document.getElementById('phrase-search');
+const cards = [...document.querySelectorAll('.phrase-card')];
+const filters = [...document.querySelectorAll('.filter-btn')];
+const empty = document.getElementById('empty');
+let currentFilter = 'All';
+
+function filterPhrases() {
+  const q = search.value.trim().toLowerCase();
+  let visible = 0;
+
+  cards.forEach(card => {
+    const categoryMatch = currentFilter === 'All' || card.dataset.category === currentFilter;
+    const searchMatch = !q || card.dataset.search.includes(q);
+    const show = categoryMatch && searchMatch;
+    card.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+
+  empty.style.display = visible ? 'none' : 'block';
+}
+
+search.addEventListener('input', filterPhrases);
+
+filters.forEach(button => {
+  button.addEventListener('click', () => {
+    filters.forEach(b => b.classList.remove('active'));
+    button.classList.add('active');
+    currentFilter = button.dataset.filter;
+    filterPhrases();
+  });
+});
+
+document.querySelectorAll('.copy-btn').forEach(button => {
+  button.addEventListener('click', async () => {
+    const original = button.textContent;
+    try {
+      await navigator.clipboard.writeText(button.dataset.copy);
+      button.textContent = 'Copied ✓';
+      button.classList.add('copied');
+    } catch {
+      button.textContent = 'Select Thai above';
+    }
+    setTimeout(() => {
+      button.textContent = original;
+      button.classList.remove('copied');
+    }, 1400);
+  });
+});
+
+const modal = document.getElementById('phrase-modal');
+const modalThai = document.getElementById('modal-thai');
+const modalEnglish = document.getElementById('modal-english');
+const closeModal = document.getElementById('close-modal');
+
+document.querySelectorAll('.show-btn').forEach(button => {
+  button.addEventListener('click', () => {
+    modalThai.textContent = button.dataset.thai;
+    modalEnglish.textContent = button.dataset.english;
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+});
+
+function closePhraseModal() {
+  modal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+closeModal.addEventListener('click', closePhraseModal);
+modal.addEventListener('click', e => {
+  if (e.target === modal) closePhraseModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closePhraseModal();
+});
+</script>
+</body>
+</html>
